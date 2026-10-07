@@ -7,6 +7,8 @@ import com.matias.LigaVideojuegos.model.Liga;
 import com.matias.LigaVideojuegos.repository.EquipoRepository;
 import com.matias.LigaVideojuegos.repository.LigaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +27,13 @@ public class EquipoService {
 
         return mapearDTO(guardado);
     }
+
+    public Page<EquipoResponse>listarEquipos(Pageable pageable){
+        Page<Equipo>listaEquipos=equipoRepository.findAll(pageable);
+
+        return listaEquipos.map(this::mapearDTO);
+    }
+
 
     private EquipoResponse mapearDTO(Equipo e){
         Liga liga = ligaRepository.getByIdOrThrow(e.getId());
