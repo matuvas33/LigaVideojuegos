@@ -2,6 +2,7 @@ package com.matias.LigaVideojuegos.controller;
 
 import com.matias.LigaVideojuegos.dto.liga.LigaRequest;
 import com.matias.LigaVideojuegos.dto.liga.LigaResponse;
+import com.matias.LigaVideojuegos.model.enums.EstadoLiga;
 import com.matias.LigaVideojuegos.service.LigaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +22,13 @@ public class LigaController {
 
     @GetMapping
     public ResponseEntity<Page<LigaResponse>>listaLiga(
+            @RequestParam(required = false)EstadoLiga estadoLiga,
             @PageableDefault(size = 5,page = 0)Pageable pageable
             ){
 
-        Page<LigaResponse>listaLiga = service.listarLigas(pageable);
-
+        Page<LigaResponse>listaLiga = service.listarLigas(estadoLiga,pageable);
         return ResponseEntity.ok(listaLiga);
+
     }
 
     @GetMapping("/{id}")

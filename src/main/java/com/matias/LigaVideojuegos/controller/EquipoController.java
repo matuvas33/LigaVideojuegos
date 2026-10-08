@@ -28,11 +28,18 @@ public class EquipoController {
 
     @GetMapping
     public ResponseEntity<Page<EquipoResponse>>listaEquipos(
-            @PageableDefault(size = 5,page = 0) Pageable pageable
-            ){
-        Page<EquipoResponse>listaEquipos = service.listarEquipos(pageable);
+            @PageableDefault(size = 5,page = 0) Pageable pageable, @PathVariable Long ligaId){
+        Page<EquipoResponse>listaEquipos = service.listarEquipos(ligaId,pageable);
 
         return ResponseEntity.ok(listaEquipos);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> borrarEquipo(@PathVariable Long id){
+
+        service.borrarEquipo(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 

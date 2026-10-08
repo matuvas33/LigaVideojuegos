@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 public record LigaRequest(
     @NotBlank
-    @Size(max = 60)
+    @Size(min = 3,max = 60)
     String nombre
 ){
 }

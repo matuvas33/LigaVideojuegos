@@ -4,6 +4,7 @@ import com.matias.LigaVideojuegos.dto.equipo.EquipoRequest;
 import com.matias.LigaVideojuegos.dto.equipo.EquipoResponse;
 import com.matias.LigaVideojuegos.model.Equipo;
 import com.matias.LigaVideojuegos.model.Liga;
+import com.matias.LigaVideojuegos.model.enums.EstadoLiga;
 import com.matias.LigaVideojuegos.repository.EquipoRepository;
 import com.matias.LigaVideojuegos.repository.LigaRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,20 +29,26 @@ public class EquipoService {
         return mapearDTO(guardado);
     }
 
-    public Page<EquipoResponse>listarEquipos(Pageable pageable){
-        Page<Equipo>listaEquipos=equipoRepository.findAll(pageable);
+    public Page<EquipoResponse>listarEquipos(Long ligaId,Pageable pageable){
+        Liga liga = ligaRepository.getByIdOrThrow(ligaId);
+
+        Page<Equipo>listaEquipos=equipoRepository.findByLigaId(liga.getId(),pageable);
 
         return listaEquipos.map(this::mapearDTO);
     }
 
+    public void borrarEquipo(Long id){
+        Equipo equipo = equipoRepository.getIdOrThrow(id);
+        equipoRepository.delete(equipo);
+    }
+
 
     private EquipoResponse mapearDTO(Equipo e){
-        Liga liga = ligaRepository.getByIdOrThrow(e.getId());
       return new EquipoResponse(
               e.getId(),
               e.getNombre(),
-              liga.getId(),
-              liga.getNombre()
+              e.getLiga().getId(),
+              e.getLiga().getNombre()
       );
     }
 }
